@@ -19,7 +19,7 @@ function App() {
           <Route
             path="*"
             element={
-              <main style={{ padding: "1rem" }}>
+              <main style={{ padding: '1rem' }}>
                 <p>404 not found</p>
               </main>
             }
