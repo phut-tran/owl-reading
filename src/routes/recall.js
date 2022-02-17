@@ -3,7 +3,7 @@ const Recall = props => {
     <div>
       <h1>Recall</h1>
     </div>
-  );
+  )
 }
 
-export default Recall;
+export default Recall
