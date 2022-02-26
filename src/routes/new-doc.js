@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import InputBase from '@mui/material/InputBase'
 import { useState } from 'react'
@@ -8,13 +8,37 @@ import StyleControls from '../common/style-controls'
 import Fab from '@mui/material/Fab'
 import SaveIcon from '@mui/icons-material/Save'
 import { db } from '../modals/db'
+import TagsInput from '../common/tags-input'
+import { useLiveQuery } from 'dexie-react-hooks'
 
 function NewDocument(props) {
+  const tagsDB = useLiveQuery(
+    () => db.docsMetaData
+      .orderBy('tags')
+      .uniqueKeys()
+
+  )
   const editor = useRef(null)
   const [title, setTitle] = useState('')
 
+  // Tags input from users.
+  const [tags, setTags] = useState([])
+
+  // All tags from database for auto-complete.
+  const [tagOptions, setTagOptions] = useState([])
+
+  useEffect(() => {
+    if (tagsDB) {
+      setTagOptions(tagsDB)
+    }
+  }, [tagsDB])
+
   const handleTitleChange = (event) => {
     setTitle(event.target.value)
+  }
+
+  const handleTagsInputchange = (event, value) => {
+    setTags(value)
   }
 
   const [editorState, setEditorState] = useState(
@@ -56,6 +80,7 @@ function NewDocument(props) {
         created: new Date(),
         docsContentId: contentId,
         contentPreview: extractString(plainText, 30),
+        tags,
       })
     } catch (e) {
       console.log(e)
@@ -74,6 +99,7 @@ function NewDocument(props) {
         sx={{ padding: '15px' }}
         onChange={handleTitleChange}
       />
+      <TagsInput tags={tagOptions} handleTagsInput={handleTagsInputchange} />
       <Box
         sx={{ padding: '15px' }}>
 
@@ -97,6 +123,7 @@ function NewDocument(props) {
         position: 'fixed',
         bottom: '16px',
         right: '16px',
+        zIndex: '1000',
       }}
         onClick={saveDocument}
         color='primary'

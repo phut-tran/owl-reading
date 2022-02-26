@@ -5,21 +5,20 @@ import NewDocument from '../new-doc'
 import { db } from '../../modals/db'
 import { wait } from '@testing-library/user-event/dist/utils'
 
-jest.mock('../../modals/db', () => {
-  return {
-    __esModule: true,
-    db: {
-      docsMetaData: {
-        add: jest.fn(),
-      },
-      docsContent: {
-        add: jest.fn(),
-      },
-      open: jest.fn(),
-    },
-  }
-})
+jest.mock('dexie-react-hooks', () => ({
+  useLiveQuery: jest.fn(),
+}))
 
+jest.mock('../../modals/db', () => ({
+  db: {
+    docsMetaData: {
+      add: jest.fn(),
+    },
+    docsContent: {
+      add: jest.fn(),
+    },
+  },
+}))
 
 it('should render title input', () => {
   render(<NewDocument />)
@@ -57,14 +56,10 @@ it('should render save button', () => {
 })
 
 it('should call saveDocument function on save button click', async () => {
-  const mockDocsMeta = jest.spyOn(db.docsMetaData, 'add')
-  const mockDocConent = jest.spyOn(db.docsContent, 'add')
-  mockDocsMeta.mockResolvedValue(1)
-  mockDocConent.mockResolvedValue(1)
   render(<NewDocument />)
   const saveButton = screen.getByLabelText(/save document/i)
   userEvent.click(saveButton)
 
-  await wait(() => expect(mockDocsMeta).toHaveBeenCalled())
-  await wait(() => expect(mockDocConent).toHaveBeenCalled())
+  await wait(() => expect(db.docsMetaData.add).toHaveBeenCalled())
+  await wait(() => expect(db.docsContent.add).toHaveBeenCalled())
 })
