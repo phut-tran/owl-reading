@@ -4,6 +4,8 @@ import { Routes, Route } from 'react-router-dom'
 import ReadingList from './routes/reading-list'
 import Recall from './routes/recall'
 import NewDoc from './routes/new-doc'
+import { initDB } from './modals/db'
+initDB()
 
 function App() {
   return (
