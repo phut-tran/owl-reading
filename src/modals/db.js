@@ -5,11 +5,12 @@ export const db = new Dexie('owl-reading')
 
 export function initDB() {
   db.version(1).stores({
-    docsMetaData: '++id, title, lastOpen, isComplete, created, *tags, docsContentId, contentPreview',
-    docsContent: '++id',
+    docsMetaData: 'id, title, lastOpen, isComplete, created, *tags, contentPreview',
+    docsContent: 'id',
+    trash: 'id',
   })
 
-  // db.on('populate', populate)
+  db.on('populate', populate)
 
   db.open().catch(function (e) {
     console.error('Error opening database: ' + e.stack || e)

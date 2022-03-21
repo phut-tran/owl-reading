@@ -3,7 +3,6 @@ import ResponsiveAppBar from './common/navbar'
 import { Routes, Route } from 'react-router-dom'
 import ReadingList from './routes/reading-list'
 import Recall from './routes/recall'
-import NewDoc from './routes/new-doc'
 import { initDB } from './modals/db'
 initDB()
 
@@ -14,7 +13,6 @@ function App() {
       <Routes>
         <Route path='reading-list' element={<ReadingList />} />
         <Route path='recall' element={<Recall />} />
-        <Route path='reading/new' element={<NewDoc />} />
         <Route
           path='*'
           element={
