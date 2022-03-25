@@ -19,6 +19,13 @@ function DocumentCard({ userDocument, dispatch }) {
     })
   }
 
+  function handleEditDoc() {
+    dispatch({
+      type: 'EDIT_DOC',
+      docId: id,
+    })
+  }
+
   return (
     <Box>
       <Card variant='outlined'>
@@ -39,7 +46,7 @@ function DocumentCard({ userDocument, dispatch }) {
           </CardContent>
         </Link>
         <CardActions disableSpacing>
-          <IconButton aria-label='edit'>
+          <IconButton onClick={handleEditDoc} aria-label='edit'>
             <EditIcon />
           </IconButton>
           <IconButton onClick={handleDeleteDoc} aria-label='delete'>

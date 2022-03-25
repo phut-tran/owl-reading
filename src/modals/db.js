@@ -17,6 +17,10 @@ export function initDB() {
   })
 }
 
+export function getAllTags() {
+  return db.docsMetaData.orderBy('tags').uniqueKeys()
+}
+
 export function deleteDocument(metaId) {
   return this.transaction('rw', this.docsMetaData, this.docsContent, () => {
     this.docsContent.where({ metaId }).delete()

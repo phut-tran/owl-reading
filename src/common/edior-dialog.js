@@ -14,26 +14,20 @@ import 'draft-js/dist/Draft.css'
 import StyleControls from '../common/style-controls'
 import { db } from '../modals/db'
 import TagsInput from '../common/tags-input'
-import { useLiveQuery } from 'dexie-react-hooks'
 import { v4 as uuidv4 } from 'uuid'
 import { extractString } from '../utils'
+import { convertFromRaw } from 'draft-js'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
 })
 
-function NewDocDialog({ open, dispatch }) {
+function EditorDialog({ docId, open, dispatch }) {
   const handleClose = () => {
     dispatch({
-      type: 'TOGGLE_ADD_DOC_DIALOG'
+      type: 'TOGGLE_DIALOG'
     })
   }
-
-  const tagsDB = useLiveQuery(
-    () => db.docsMetaData
-      .orderBy('tags')
-      .uniqueKeys()
-  )
 
   const editor = useRef(null)
   const [title, setTitle] = useState('')
@@ -41,26 +35,34 @@ function NewDocDialog({ open, dispatch }) {
   // Tags input from users.
   const [tags, setTags] = useState([])
 
-  // All tags from database for auto-complete.
-  const [tagOptions, setTagOptions] = useState([])
+  const [editorState, setEditorState] = useState(
+    () => EditorState.createEmpty()
+  )
 
   useEffect(() => {
-    if (tagsDB) {
-      setTagOptions(tagsDB)
+    if (docId) {
+      db.docsMetaData.get(docId)
+        .then(docMeta => {
+          setTags(docMeta.tags)
+          setTitle(docMeta.title)
+        })
+
+      db.docsContent.get(docId)
+        .then(docContent => {
+          const content = convertFromRaw(docContent.content)
+          const contentState = EditorState.createWithContent(content)
+          setEditorState(contentState)
+        })
+    } else {
+      setTags([])
+      setTitle('')
+      setEditorState(EditorState.createEmpty())
     }
-  }, [tagsDB])
+  }, [docId])
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value)
   }
-
-  const handleTagsInputchange = (event, value) => {
-    setTags(value)
-  }
-
-  const [editorState, setEditorState] = useState(
-    () => EditorState.createEmpty(),
-  )
 
   const handleKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command)
@@ -86,25 +88,25 @@ function NewDocDialog({ open, dispatch }) {
   }
 
   async function saveDocument() {
-    try {
-      const plainText = editorState.getCurrentContent().getPlainText()
-      const rowContent = convertToRaw(editorState.getCurrentContent())
-      const docsId = uuidv4()
-      await db.docsContent.add({ id: docsId, content: rowContent })
-
-      await db.docsMetaData.add({
-        id: docsId,
-        title,
-        isComplete: Number(false), // IndexedDB doesn't support indexed boolean.
-        created: new Date(),
-        contentPreview: extractString(plainText, 30),
-        tags,
-      })
-
-      handleClose()
-    } catch (e) {
-      console.log(e)
+    const plainText = editorState.getCurrentContent().getPlainText()
+    const rowContent = convertToRaw(editorState.getCurrentContent())
+    const id = docId || uuidv4()
+    const docMeta = {
+      id,
+      title,
+      isComplete: Number(false), // IndexedDB doesn't support indexed boolean.
+      contentPreview: extractString(plainText, 30),
+      tags,
     }
+
+    if (docId) {
+      await db.docsMetaData.put(docMeta)
+    } else {
+      await db.docsMetaData.put({ ...docMeta, created: new Date() })
+    }
+
+    await db.docsContent.put({ id, content: rowContent })
+    handleClose()
   }
 
   return (
@@ -125,7 +127,7 @@ function NewDocDialog({ open, dispatch }) {
             <CloseIcon />
           </IconButton>
           <Typography sx={{ ml: 2, flex: 1 }} variant='h6' component='div'>
-            New Document
+            {docId ? 'Edit Document' : 'New Document'}
           </Typography>
           <Button autoFocus color='inherit' onClick={saveDocument}>
             save
@@ -143,7 +145,7 @@ function NewDocDialog({ open, dispatch }) {
           sx={{ padding: '15px' }}
           onChange={handleTitleChange}
         />
-        <TagsInput tags={tagOptions} handleTagsInput={handleTagsInputchange} />
+        <TagsInput tags={tags} setTags={setTags} />
         <Box
           sx={{ padding: '15px' }}>
 
@@ -168,4 +170,4 @@ function NewDocDialog({ open, dispatch }) {
   )
 }
 
-export default NewDocDialog
+export default EditorDialog

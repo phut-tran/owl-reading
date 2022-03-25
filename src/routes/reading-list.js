@@ -8,17 +8,17 @@ import DeleteSnackbar from '../common/delete-snackbar'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import { v4 as uuidv4 } from 'uuid'
-import NewDocDialog from '../common/new-doc-dialog'
+import EditorDialog from '../common/edior-dialog'
 
 function reducer(state, action) {
   switch (action.type) {
     case 'ADD_DOC':
-      return { ...state, isShowAddNewDialog: true }
+      return { ...state, isShowDialog: true, editDocId: null }
     case 'DELETE_DOC':
       const idInTrash = deleteDoc(action.docId)
       return { ...state, deletedId: idInTrash, isShowSnackbar: true, }
     case 'EDIT_DOC':
-      return {}
+      return { ...state, isShowDialog: true, editDocId: action.docId }
     case 'UNDO_DELETE_DOC':
       restoreDoc(state.deletedId)
       return { ...state, deletedId: null }
@@ -26,18 +26,18 @@ function reducer(state, action) {
       return { ...state, isShowBackdrop: !state.isShowBackdrop }
     case 'TOGGLE_SNACKBAR':
       return { ...state, isShowSnackbar: !state.isShowSnackbar }
-    case 'TOGGLE_ADD_DOC_DIALOG':
-      return { ...state, isShowAddNewDialog: !state.isShowAddNewDialog }
+    case 'TOGGLE_DIALOG':
+      return { ...state, isShowDialog: !state.isShowDialog }
     default:
       throw new Error(`Unknow document action: ${action.type}`)
   }
 }
 
 const initState = {
-  isShowAddNewDialog: false,
-  isShowEditDialog: false,
+  isShowDialog: false,
   isShowBackdrop: true,
   isShowSnackbar: false,
+  editDocId: null,
   idInTrash: null,
 }
 
@@ -81,6 +81,7 @@ function restoreDoc(id) {
 
 function ReadingList() {
   const [state, dispatch] = useReducer(reducer, initState)
+  const { isShowBackdrop, isShowSnackbar, isShowDialog, editDocId } = state
 
   const userDocs = useLiveQuery(
     () => db.docsMetaData
@@ -104,16 +105,16 @@ function ReadingList() {
         )) : (
           <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={state.isShowBackdrop}
+            open={isShowBackdrop}
             onClick={() => dispatch({ type: 'TOGGLE_BACKDROP' })}>
             <CircularProgress color='inherit' />
           </Backdrop>
         )}
       </Grid>
       <DeleteSnackbar
-        open={state.isShowSnackbar}
+        open={isShowSnackbar}
         dispatch={dispatch} />
-      <NewDocDialog open={state.isShowAddNewDialog} dispatch={dispatch} />
+      <EditorDialog docId={editDocId} open={isShowDialog} dispatch={dispatch} />
     </div>
   )
 }

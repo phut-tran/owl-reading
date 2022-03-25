@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add'
 function AddDocButton({ dispatch }) {
   function handleButtonClick() {
     dispatch({
-      type: 'TOGGLE_ADD_DOC_DIALOG',
+      type: 'ADD_DOC',
     })
   }
 
