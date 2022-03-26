@@ -9,14 +9,19 @@ import CloseIcon from '@mui/icons-material/Close'
 import Slide from '@mui/material/Slide'
 import Box from '@mui/material/Box'
 import InputBase from '@mui/material/InputBase'
-import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js'
 import 'draft-js/dist/Draft.css'
 import StyleControls from '../common/style-controls'
 import { db } from '../modals/db'
 import TagsInput from '../common/tags-input'
 import { v4 as uuidv4 } from 'uuid'
 import { extractString } from '../utils'
-import { convertFromRaw } from 'draft-js'
+import {
+  Editor,
+  EditorState,
+  RichUtils,
+  convertToRaw,
+  convertFromRaw
+} from 'draft-js'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />

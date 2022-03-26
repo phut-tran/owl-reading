@@ -16,7 +16,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 const pages = [
   {
-    path: '/reading-list',
+    path: '/reading',
     linkText: 'Reading List',
   },
   {
