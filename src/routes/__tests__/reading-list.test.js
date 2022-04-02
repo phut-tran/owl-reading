@@ -1,23 +1,23 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import ReadingList from '../reading-list'
 import { MemoryRouter } from 'react-router-dom'
-import { useLiveQuery } from 'dexie-react-hooks'
+import { getFilteredDocs } from '../../modals/db'
 
-jest.mock('dexie-react-hooks')
+const docs = [{
+  id: 1,
+  title: 'Test Title',
+  isComplete: 0,
+  created: new Date(),
+  contentPreview: 'Test content preview',
+  tags: ['sample-reading'],
+  lastOpen: new Date(),
+}]
 
-it('should render a greeting', () => {
-  const docs = [{
-    id: 1,
-    title: 'Test Title',
-    isComplete: 0,
-    created: new Date(),
-    contentPreview: 'Test content preview',
-    tags: ['sample-reading'],
-    lastOpen: new Date(),
-  }]
+jest.mock('../../modals/db')
 
-  useLiveQuery.mockReturnValue(docs)
+it('should render a greeting', async () => {
+  getFilteredDocs.mockImplementation(() => Promise.resolve(docs))
   render(<ReadingList />, { wrapper: MemoryRouter })
-  const greeting = screen.getByText(/enjoy reading/i)
+  const greeting = await waitFor(() => screen.findByText(/enjoy reading/i))
   expect(greeting).toBeInTheDocument()
 })

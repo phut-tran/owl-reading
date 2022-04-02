@@ -1,6 +1,5 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
 import { Link as RouterLink } from 'react-router-dom'
@@ -9,6 +8,7 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import CardFooter from '@mui/material/Card'
 function DocumentCard({ userDocument, dispatch }) {
   const { id, title, contentPreview } = userDocument
 
@@ -27,8 +27,8 @@ function DocumentCard({ userDocument, dispatch }) {
   }
 
   return (
-    <Box>
-      <Card variant='outlined'>
+    <Card variant='outlined' sx={{ margin: 'auto', maxWidth: 345 }}>
+      <CardContent sx={{ paddingBottom: 0 }}>
         <Link
           color='inherit'
           underline='none'
@@ -36,15 +36,28 @@ function DocumentCard({ userDocument, dispatch }) {
           data-testid='link-card'
           component={RouterLink}
           to={`/reading/${id}`}>
-          <CardContent>
-            <Typography noWrap variant='h6' gutterBottom>
-              {title}
-            </Typography>
-            <Typography variant='body2'>
-              {contentPreview}
-            </Typography>
-          </CardContent>
+          <Typography
+            noWrap
+            variant='h4'
+            sx={{ fontSize: '1.25rem', fontWeight: 500, pb: 2, maxWidth: '80%' }}>
+            {title}
+          </Typography>
+          <Typography
+            variant='body2'
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              marginBottom: 0
+            }}
+          >
+            {contentPreview}
+          </Typography>
         </Link>
+      </CardContent>
+      <CardFooter>
         <CardActions disableSpacing>
           <IconButton onClick={handleEditDoc} aria-label='edit'>
             <EditIcon />
@@ -53,8 +66,8 @@ function DocumentCard({ userDocument, dispatch }) {
             <DeleteIcon />
           </IconButton>
         </CardActions>
-      </Card>
-    </Box>
+      </CardFooter>
+    </Card>
   )
 }
 

@@ -28,10 +28,10 @@ function Reading() {
           setEditorState(contentState)
         })
     }
-  })
+  }, [docId])
   return (
     <Box sx={{ maxWidth: '560px', margin: 'auto' }}>
-      <Typography variant='h1' sx={{ fontSize: 32 }}>{title}</Typography>
+      <Typography variant='h1' sx={{ fontSize: 28, mt: 6, mb: 6 }}>{title}</Typography>
       <Editor
         readOnly
         editorState={editorState}
