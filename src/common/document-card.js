@@ -1,41 +1,81 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import PropTypes from 'prop-types';
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
+import PropTypes from 'prop-types'
 import { Link as RouterLink } from 'react-router-dom'
 import Link from '@mui/material/Link'
+import CardActions from '@mui/material/CardActions'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
+import CardFooter from '@mui/material/Card'
+function DocumentCard({ userDocument, dispatch }) {
+  const { id, title, contentPreview } = userDocument
 
-function DocumentCard(props) {
-  const { id, title, textShort } = props.userDocument;
+  function handleDeleteDoc() {
+    dispatch({
+      type: 'DELETE_DOC',
+      docId: id,
+    })
+  }
+
+  function handleEditDoc() {
+    dispatch({
+      type: 'EDIT_DOC',
+      docId: id,
+    })
+  }
+
   return (
-    <Link
-      underline='none'
-      sx={{ display: 'block', maxWidth: 275 }}
-      data-testid="link-card"
-      component={RouterLink}
-      to={`/reading/${id}`}>
-      <Box>
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="h5" gutterBottom>
-              {title}
-            </Typography>
-            <Typography variant="body2">
-              {textShort}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Box>
-    </Link>
+    <Card variant='outlined' sx={{ margin: 'auto', maxWidth: 345 }}>
+      <CardContent sx={{ paddingBottom: 0 }}>
+        <Link
+          color='inherit'
+          underline='none'
+          sx={{ display: 'block' }}
+          data-testid='link-card'
+          component={RouterLink}
+          to={`/reading/${id}`}>
+          <Typography
+            noWrap
+            variant='h4'
+            sx={{ fontSize: '1.25rem', fontWeight: 500, pb: 2, maxWidth: '80%' }}>
+            {title}
+          </Typography>
+          <Typography
+            variant='body2'
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              marginBottom: 0
+            }}
+          >
+            {contentPreview}
+          </Typography>
+        </Link>
+      </CardContent>
+      <CardFooter>
+        <CardActions disableSpacing>
+          <IconButton onClick={handleEditDoc} aria-label='edit'>
+            <EditIcon />
+          </IconButton>
+          <IconButton onClick={handleDeleteDoc} aria-label='delete'>
+            <DeleteIcon />
+          </IconButton>
+        </CardActions>
+      </CardFooter>
+    </Card>
   )
 }
 
 DocumentCard.propTypes = {
   userDocument: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    textShort: PropTypes.string.isRequired,
+    contentPreview: PropTypes.string.isRequired,
   }).isRequired,
 }
 
-export default DocumentCard;
+export default DocumentCard

@@ -1,37 +1,40 @@
 import { db } from './db'
+import * as prologue from './sample-reading/pirate-cinema-prologue.json'
+import * as chapterOne from './sample-reading/pirate-cinema-chap-one.json'
+import { v4 as uuidv4 } from 'uuid'
+
+const [prologueId, chapterOneId] = Array(2).fill(null).map(_ => uuidv4())
 
 export async function populate() {
   await db.docsContent.bulkAdd([
     {
-      id: 1,
-      content:
-        'Hello and welcome to Owl Reading. This application helps you learn foreign languages through reading.',
+      id: prologueId,
+      content: prologue,
     },
     {
-      id: 2,
-      content:
-        'Mother Mary Teresa Bojaxhiu[6] (born Anjezë Gonxhe Bojaxhiu, Albanian: 26 August 1910 - 5 September 1997), honoured in the Catholic Church as Saint Teresa of Calcutta,[7] was an Albanian-Indian[4] Roman Catholic nun and missionary.[8] She was born in Skopje (now the capital of North Macedonia), then part of the Kosovo Vilayet of the Ottoman Empire. After living in Skopje for eighteen years, she moved to Ireland and then to India, where she lived for most of her life. \nIn 1950, Teresa founded the Missionaries of Charity, a Roman Catholic religious congregation that had over 4, 500 nuns and was active in 133 countries as of 2012. The congregation manages homes for people who are dying of HIV/ AIDS, leprosy and tuberculosis.It also runs soup kitchens, dispensaries, mobile clinics, children\'s and family counselling programmes, as well as orphanages and schools. Members take vows of chastity, poverty, and obedience, and also profess a fourth vow - to give "wholehearted free service to the poorest of the poor. \n"Teresa received a number of honours, including the 1962 Ramon Magsaysay Peace Prize and the 1979 Nobel Peace Prize.She was canonised on 4 September 2016, and the anniversary of her death(5 September) is her feast day.A controversial figure during her life and after her death, Teresa was admired by many for her charitable work.She was praised and criticized on various counts, such as for her views on abortion and contraception, and was criticized for poor conditions in her houses for the dying.Her authorized biography was written by Navin Chawla and published in 1992, and she has been the subject of films and other books.On 6 September 2017, Teresa and St.Francis Xavier were named co - patrons of the Roman Catholic Archdiocese of Calcutta.',
+      id: chapterOneId,
+      content: chapterOne,
     },
   ])
 
   await db.docsMetaData.bulkAdd([
     {
-      id: 1,
-      title: 'Welcome to Owl Reading',
-      isComplete: false,
+      id: prologueId,
+      title: 'Prologue: A star finds true love/A knock at the door/A family ruined/On the road/Alone',
+      isComplete: 0,
       created: new Date(),
-      docsContentId: '1',
-      contentPreview: 'Welcome to Owl Reading',
-      tags: [],
+      contentPreview: 'I will never forget the day my family got cut off from the Internet. I was hiding in my room as I usually did after school let out, holed up',
+      tags: ['pirate-cinema', 'sample-reading'],
+      lastOpen: new Date(),
     },
     {
-      id: 2,
-      title: 'About Teresa',
-      isComplete: false,
+      id: chapterOneId,
+      title: 'Chapter 1: Alone no more/The Jammie Dodgers/Posh digs/Abstraction of Electricity',
+      isComplete: 0,
       created: new Date(),
-      docsContentId: '2',
-      contentPreview: 'About Teresa',
-      tags: [],
-    }
+      contentPreview: 'My "adventure" wasn\'t much fun after that. I was smart enough to find a shelter for runaways run by a church in Shoreditch, and I checked myself in that night,',
+      tags: ['pirate-cinema', 'sample-reading'],
+      lastOpen: new Date(),
+    },
   ])
 }

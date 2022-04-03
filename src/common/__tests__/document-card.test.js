@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter, Router } from 'react-router-dom';
+import { MemoryRouter, Router } from 'react-router-dom'
 import DocumentCard from '../document-card'
 import { createMemoryHistory } from 'history'
 
 const userDocument = {
   id: 1,
   title: 'Test document',
-  textShort: 'Document text preview',
+  contentPreview: 'Document text preview',
 }
 
 it('should render card title', function () {
@@ -22,7 +22,7 @@ it('should render card text preview', function () {
   render(
     <DocumentCard userDocument={userDocument} />
     , { wrapper: MemoryRouter })
-  const textShortElement = screen.getByText(userDocument.textShort)
+  const textShortElement = screen.getByText(userDocument.contentPreview)
   expect(textShortElement).toBeInTheDocument()
 })
 
