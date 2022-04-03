@@ -25,6 +25,13 @@ export function getFilteredDocs() {
   return db.docsMetaData.where('isComplete').equals(0).sortBy('lastOpen')
 }
 
+export function getDocById(id) {
+  return Promise.all([
+    db.docsMetaData.get(id),
+    db.docsContent.get(id),
+  ])
+}
+
 export function deleteDocument(id) {
   db.transaction(
     'rw',
