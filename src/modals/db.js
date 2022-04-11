@@ -1,5 +1,6 @@
 import Dexie from 'dexie'
 import { populate } from './populate'
+import { v4 as uuidv4 } from 'uuid'
 
 export const db = new Dexie('owl-reading')
 
@@ -7,6 +8,7 @@ export function initDB() {
   db.version(1).stores({
     docsMetaData: 'id, title, lastOpen, isComplete, created, *tags, contentPreview',
     docsContent: 'id',
+    fashcards: '&keyword, translate',
     trash: 'id',
   })
 
@@ -25,6 +27,13 @@ export function getFilteredDocs() {
   return db.docsMetaData.where('isComplete').equals(0).sortBy('lastOpen')
 }
 
+export function getDocById(id) {
+  return Promise.all([
+    db.docsMetaData.get(id),
+    db.docsContent.get(id),
+  ])
+}
+
 export function deleteDocument(id) {
   db.transaction(
     'rw',
@@ -32,7 +41,8 @@ export function deleteDocument(id) {
     db.docsContent,
     db.trash,
     async () => {
-      const trashId = db.trash.add({
+      const trashId = await db.trash.add({
+        id: uuidv4(),
         docsMeta: await db.docsMetaData.get(id),
         docsContent: await db.docsContent.get(id),
       })
@@ -62,4 +72,8 @@ export function resetDatabase() {
     await Promise.all(db.tables.map(table => table.clear()))
     await populate()
   })
+}
+
+export function saveFlashcard(flashcard) {
+  return db.fashcards.add(flashcard)
 }
