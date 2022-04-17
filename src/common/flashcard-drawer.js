@@ -14,7 +14,7 @@ import Stack from '@mui/material/Stack'
 import IconButton from '@mui/material/IconButton'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp'
 import CircularProgress from '@mui/material/CircularProgress'
-import { getWordDefinition, partsOfSpeech } from '../utils'
+import { getWordDefinition, partsOfSpeech, defaultRecallParams } from '../utils'
 import { saveFlashcard } from '../modals/db'
 import Alert from '@mui/material/Alert'
 
@@ -74,14 +74,17 @@ function WordForm({ word, dispatch }) {
 
   const audioRef = useRef(null)
 
-  const handleSubmit = (event) => {
+  function handleSubmit(event) {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    const flashcardData = Object.assign({ keyword, audio }, {
+    const flashcardData = {
+      ...defaultRecallParams,
+      keyword,
+      audio,
       partOfSpeech: data.get('part-of-speech'),
       phonetic: data.get('phonetic'),
-      translate: data.get('translate')
-    })
+      translation: data.get('translate'),
+    }
 
     saveFlashcard(flashcardData)
       .then(_ => {

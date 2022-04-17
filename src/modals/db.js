@@ -1,6 +1,8 @@
 import Dexie from 'dexie'
 import { populate } from './populate'
 import { v4 as uuidv4 } from 'uuid'
+import dayjs from 'dayjs'
+import { supermemo } from 'supermemo'
 
 export const db = new Dexie('owl-reading')
 
@@ -8,7 +10,7 @@ export function initDB() {
   db.version(1).stores({
     docsMetaData: 'id, title, lastOpen, isComplete, created, *tags, contentPreview',
     docsContent: 'id',
-    fashcards: '&keyword, translate',
+    flashcards: 'id, keyword, translation, efactor, dueDate',
     trash: 'id',
   })
 
@@ -75,5 +77,45 @@ export function resetDatabase() {
 }
 
 export function saveFlashcard(flashcard) {
-  return db.fashcards.add(flashcard)
+  const { keyword } = flashcard
+  const isRecordExists = async () => await db.flashcards.where('keyword').equals(keyword).count()
+  return new Promise((resolve, reject) => {
+    isRecordExists()
+      .then(count => {
+        if (count) {
+          reject(new Error(`${keyword} already added.`))
+        } else {
+          resolve(db.flashcards.bulkAdd([
+            {
+              ...flashcard,
+              id: uuidv4(),
+              isFrontSide: true,
+            },
+            {
+              ...flashcard,
+              id: uuidv4(),
+              isFrontSide: false,
+            }
+          ]))
+        }
+      })
+  })
+}
+
+export function updateFlashcard(flashcard) {
+  const { id, ...rest } = flashcard
+  return db.flashcards.update(id, rest)
+}
+
+export function getDueFlashcards() {
+  const today = dayjs(Date.now()).format('YYYY-MM-DD')
+  return db.flashcards.where('dueDate').belowOrEqual(today).sortBy('efactor')
+}
+
+export function practice(flashcard, grade) {
+  const { interval, repetition, efactor } = supermemo(flashcard, grade)
+
+  const dueDate = dayjs(Date.now()).add(interval, 'day').format('YYYY-MM-DD')
+
+  updateFlashcard({ ...flashcard, interval, repetition, efactor, dueDate })
 }
