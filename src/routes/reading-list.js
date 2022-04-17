@@ -7,7 +7,7 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import EditorDialog from '../common/edior-dialog'
 import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
 import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
 
@@ -57,7 +57,7 @@ function ReadingList() {
   }
 
   return (
-    <Container maxWidth='xl'>
+    <Box>
       <Typography variant='h3' sx={{ marginBottom: 5, marginTop: 5 }}>
         Enjoy reading
       </Typography>
@@ -92,7 +92,7 @@ function ReadingList() {
         open={!userDocs.length}>
         <CircularProgress color='inherit' />
       </Backdrop>
-    </Container>
+    </Box>
   )
 }
 
