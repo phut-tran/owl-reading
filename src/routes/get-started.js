@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -7,11 +8,25 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration'
 import Autocomplete from '@mui/material/Autocomplete'
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
 import countries from '../modals/iso-lang.json'
+import { useNavigate } from 'react-router-dom'
+import { initDB } from '../modals/db'
 
 export default function GetStarted() {
-  function handleSubmit() {
-    console.log('form submited')
+  const [dbError, setDbError] = useState(null)
+  const navigate = useNavigate()
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    const data = new FormData(event.target)
+    const nickname = data.get('nickname')
+    const langCode = data.get('native-language').split('-')[1]
+    window.localStorage.setItem('or-setting', JSON.stringify({ nickname, langCode }))
+    initDB()
+      .catch((error) => { setDbError(error) })
+      .finally(() => { navigate('/reading') })
   }
 
   return (
@@ -20,6 +35,12 @@ export default function GetStarted() {
       justifyContent='center'
       maxWidth={480}
       sx={{ mx: 'auto', mt: 15 }}>
+      {dbError && (
+        <Alert severity='error'>
+          <AlertTitle>Error</AlertTitle>
+          {dbError.message}
+        </Alert>
+      )}
       <Stack direction='row' spacing={2} alignItems='center'>
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <AppRegistrationIcon />
@@ -28,12 +49,12 @@ export default function GetStarted() {
           Get Started
         </Typography>
       </Stack>
-      <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               autoComplete='nickname'
-              name='firstName'
+              name='nickname'
               required
               fullWidth
               id='nickname'
@@ -43,10 +64,10 @@ export default function GetStarted() {
           </Grid>
           <Grid item xs={12}>
             <Autocomplete
-              id='country-select-demo'
+              id='native-language'
               options={countries}
               autoHighlight
-              getOptionLabel={(option) => option.label}
+              getOptionLabel={(option) => option.label + '-' + option.code}
               renderOption={(props, option) => (
                 <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
                   {option.label} ({option.code})
@@ -55,7 +76,9 @@ export default function GetStarted() {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label='Choose a country'
+                  required
+                  label='Choose your native language'
+                  name='native-language'
                   inputProps={{
                     ...params.inputProps,
                     autoComplete: 'new-password', // disable autocomplete and autofill

@@ -28,6 +28,7 @@ export default function Recall() {
         console.log(error)
         setLoad('rejected')
       })
+
     if (isFinish) {
       setActiveStep(0)
       setIsFinish(false)

@@ -1,13 +1,16 @@
 import { render, screen } from '@testing-library/react'
 import App from './App'
 import { BrowserRouter } from 'react-router-dom'
+import { checkDatabase } from './modals/db'
 
-jest.mock('./modals/db', () => ({
-  initDB: jest.fn()
-}))
+jest.mock('./modals/db')
 
-test('Render logo text', () => {
+beforeEach(() => {
+  checkDatabase.mockImplementation(() => Promise.resolve(true))
+})
+
+test('Render logo text', async () => {
   render(<App />, { wrapper: BrowserRouter })
-  const logoElements = screen.getAllByText(/OwlReading/i)
+  const logoElements = await screen.findAllByText(/OwlReading/i)
   expect(logoElements.length).toBe(2)
 })

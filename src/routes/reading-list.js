@@ -39,7 +39,7 @@ const initState = {
   idInTrash: null,
 }
 
-function ReadingList() {
+export default function ReadingList() {
   const [userDocs, setUserDocs] = useState([])
   const [state, dispatch] = useReducer(reducer, initState)
   const { isShowSnackbar, isShowDialog, editDocId } = state
@@ -95,5 +95,3 @@ function ReadingList() {
     </Box>
   )
 }
-
-export default ReadingList

@@ -4,6 +4,13 @@ import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import { supermemo } from 'supermemo'
 
+const schema = {
+  docsMetaData: 'id, title, lastOpen, isComplete, created, *tags, contentPreview',
+  docsContent: 'id',
+  flashcards: 'id, keyword, translation, efactor, dueDate',
+  trash: 'id',
+}
+
 export const db = new Dexie('owl-reading')
 
 export function checkDatabase() {
@@ -11,18 +18,9 @@ export function checkDatabase() {
 }
 
 export function initDB() {
-  db.version(1).stores({
-    docsMetaData: 'id, title, lastOpen, isComplete, created, *tags, contentPreview',
-    docsContent: 'id',
-    flashcards: 'id, keyword, translation, efactor, dueDate',
-    trash: 'id',
-  })
-
+  db.version(1).stores(schema)
   db.on('populate', populate)
-
-  db.open().catch(function (e) {
-    console.error('Error opening database: ' + e.stack || e)
-  })
+  return db.open()
 }
 
 export function getAllTags() {

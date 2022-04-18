@@ -145,3 +145,4 @@ export function getEncourageFeedback() {
 function randomIntInRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
+

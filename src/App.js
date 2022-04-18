@@ -31,17 +31,19 @@ export default function App() {
     }
   }, [navigate])
 
+  let status
   if (loadStatus === 'idle') {
-    return null
+    status = null
   } else if (loadStatus === 'pending') {
-    return <ShowBackdrop />
+    status = <ShowBackdrop />
   } else if (loadStatus === 'rejected') {
-    return <ShowAlert />
+    status = <ShowAlert />
   }
 
   return (<>
     <ResponsiveAppBar />
     <Container maxWidth='xl'>
+      {status}
       <Outlet />
     </Container>
   </>)
