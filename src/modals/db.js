@@ -6,6 +6,10 @@ import { supermemo } from 'supermemo'
 
 export const db = new Dexie('owl-reading')
 
+export function checkDatabase() {
+  return Dexie.exists('owl-reading')
+}
+
 export function initDB() {
   db.version(1).stores({
     docsMetaData: 'id, title, lastOpen, isComplete, created, *tags, contentPreview',
