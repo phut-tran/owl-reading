@@ -24,12 +24,13 @@ export default function RecallForm({ card, increaseStep }) {
 
   useEffect(() => {
     async function getTranslations() {
+      const { langCode } = JSON.parse(window.localStorage.getItem('owl-reading-settings'))
       const baseArr = Array(wrongAnsers).fill(null)
       const answers = await Promise.all(baseArr.map(async () => {
         // Prevent the case where the random word indentical to the correct answer
         let randomWord
         do {
-          randomWord = await translate(randomWords(), 'vi')
+          randomWord = await translate(randomWords(), langCode)
         } while (randomWord === translation)
         return randomWord.toLowerCase()
       }))

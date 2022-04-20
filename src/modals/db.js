@@ -13,10 +13,6 @@ const schema = {
 
 export const db = new Dexie('owl-reading')
 
-export function checkDatabase() {
-  return Dexie.exists('owl-reading')
-}
-
 export function initDB() {
   db.version(1).stores(schema)
   db.on('populate', populate)

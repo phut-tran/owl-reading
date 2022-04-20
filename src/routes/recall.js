@@ -83,7 +83,7 @@ export default function Recall() {
           alignItems='center'>
           <Alert severity='success'>
             <AlertTitle>Well done</AlertTitle>
-            You've finish all the due cards today. {' '}
+            You've finished all the due cards today. {' '}
             <Link
               color='#444'
               component={RouterLink}

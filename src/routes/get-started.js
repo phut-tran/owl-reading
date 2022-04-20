@@ -23,10 +23,10 @@ export default function GetStarted() {
     const data = new FormData(event.target)
     const nickname = data.get('nickname')
     const langCode = data.get('native-language').split('-')[1]
-    window.localStorage.setItem('or-setting', JSON.stringify({ nickname, langCode }))
+    window.localStorage.setItem('owl-reading-settings', JSON.stringify({ nickname, langCode }))
     initDB()
       .catch((error) => { setDbError(error) })
-      .finally(() => { navigate('/reading') })
+      .finally(() => { navigate('/reading', { replace: true }) })
   }
 
   return (
