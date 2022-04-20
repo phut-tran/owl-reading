@@ -117,9 +117,9 @@ const ResponsiveAppBar = () => {
                 underline='none'
                 component={RouterLink}
                 to={page.path}
+                key={page.path}
               >
                 <Button
-                  key={page.path}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >

@@ -24,7 +24,8 @@ async function extractDefinition(res) {
     const { meanings, phonetic, phonetics, word } = dictionary
     const { partOfSpeech } = meanings[0]
     const audioUrls = phonetics.map(({ audio }) => audio).filter(audio => audio)
-    const translation = await translate(word, 'vi')
+    const userSetting = JSON.parse(window.localStorage.getItem('owl-reading-settings'))
+    const translation = await translate(word, userSetting.langCode)
     return {
       keyword: word,
       partOfSpeech,
@@ -145,3 +146,4 @@ export function getEncourageFeedback() {
 function randomIntInRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
+
