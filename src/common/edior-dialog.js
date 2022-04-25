@@ -163,6 +163,7 @@ function EditorDialog({ docId, open, dispatch }) {
             minHeight: '20rem'
           }}>
             <Editor
+              webDriverTestID='editor'
               handleKeyCommand={handleKeyCommand}
               placeholder='Add your favorite document here...'
               editorState={editorState}

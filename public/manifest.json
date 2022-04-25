@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Owl Reading",
+  "name": "Owl Reading - E-reader for English leaners",
   "icons": [
     {
       "src": "favicon.ico",

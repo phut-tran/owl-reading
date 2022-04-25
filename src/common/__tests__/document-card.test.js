@@ -10,6 +10,12 @@ const userDocument = {
   contentPreview: 'Document text preview',
 }
 
+jest.mock('../../modals/db', () => {
+  return {
+    deleteDocument: jest.fn(() => Promise.resolve(1)),
+  }
+})
+
 it('should render card title', function () {
   render(
     <DocumentCard userDocument={userDocument} />

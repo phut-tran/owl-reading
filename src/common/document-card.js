@@ -9,13 +9,15 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import CardFooter from '@mui/material/Card'
+import { deleteDocument } from '../modals/db'
 function DocumentCard({ userDocument, dispatch }) {
   const { id, title, contentPreview } = userDocument
 
-  function handleDeleteDoc() {
+  async function handleDeleteDoc() {
+    const deletedId = await deleteDocument(id)
     dispatch({
       type: 'DELETE_DOC',
-      docId: id,
+      deletedId,
     })
   }
 
