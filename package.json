@@ -1,5 +1,6 @@
 {
   "name": "owl-reading",
+  "homepage": "https://phut-tran.github.io/owl-reading/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
