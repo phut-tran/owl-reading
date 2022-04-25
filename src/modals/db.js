@@ -24,7 +24,17 @@ export function getAllTags() {
 }
 
 export function getFilteredDocs() {
-  return db.docsMetaData.where('isComplete').equals(0).sortBy('lastOpen')
+  return new Promise((resolve, reject) => {
+    try {
+      db.docsMetaData
+        .where('isComplete')
+        .equals(0)
+        .sortBy('lastOpen')
+        .then(docs => resolve(docs))
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
 
 export function getDocById(id) {
@@ -35,7 +45,7 @@ export function getDocById(id) {
 }
 
 export function deleteDocument(id) {
-  db.transaction(
+  return db.transaction(
     'rw',
     db.docsMetaData,
     db.docsContent,
@@ -54,16 +64,17 @@ export function deleteDocument(id) {
 }
 
 export function restoreDocument(id) {
-  db.transaction(
+  return db.transaction(
     'rw',
     db.trash,
     db.docsMetaData,
     db.docsContent,
     async () => {
       const restore = await db.trash.get(id)
-      db.docsMetaData.add(restore.docsMeta)
-      db.docsContent.add(restore.docsContent)
-      db.trash.delete(restore.id)
+      await db.docsMetaData.add(restore.docsMeta)
+      await db.docsContent.add(restore.docsContent)
+      await db.trash.delete(restore.id)
+      return restore.id
     })
 }
 
@@ -117,3 +128,5 @@ export function practice(flashcard, grade) {
 
   updateFlashcard({ ...flashcard, interval, repetition, efactor, dueDate })
 }
+
+initDB()

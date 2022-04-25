@@ -38,7 +38,8 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:cypress/recommended"
     ],
     "rules": {
       "quotes": [
@@ -57,7 +58,14 @@
         "warn",
         "prefer-single"
       ]
-    }
+    },
+    "plugins": [
+      "eslint-plugin-cypress"
+    ],
+    "env": {
+      "cypress/globals": true
+    },
+    "root": true
   },
   "browserslist": {
     "production": [
@@ -72,6 +80,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/cypress": "^8.0.2",
+    "cypress": "^9.5.4",
+    "eslint-plugin-cypress": "^2.12.1",
     "husky": "^7.0.0",
     "lint-staged": "^12.3.4",
     "prettier": "^2.5.1"

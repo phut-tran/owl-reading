@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import ReadingList from '../reading-list'
+import { ReadingList } from '../reading-list'
 import { MemoryRouter } from 'react-router-dom'
 import { getFilteredDocs } from '../../modals/db'
 
@@ -15,8 +15,11 @@ const docs = [{
 
 jest.mock('../../modals/db')
 
-it('should render a greeting', async () => {
+beforeEach(() => {
   getFilteredDocs.mockImplementation(() => Promise.resolve(docs))
+})
+
+it('should render a greeting', async () => {
   render(<ReadingList />, { wrapper: MemoryRouter })
   const greeting = await waitFor(() => screen.findByText(/enjoy reading/i))
   expect(greeting).toBeInTheDocument()

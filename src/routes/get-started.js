@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -8,14 +7,10 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration'
 import Autocomplete from '@mui/material/Autocomplete'
-import Alert from '@mui/material/Alert'
-import AlertTitle from '@mui/material/AlertTitle'
 import countries from '../modals/iso-lang.json'
 import { useNavigate } from 'react-router-dom'
-import { initDB } from '../modals/db'
 
 export default function GetStarted() {
-  const [dbError, setDbError] = useState(null)
   const navigate = useNavigate()
 
   function handleSubmit(event) {
@@ -24,9 +19,7 @@ export default function GetStarted() {
     const nickname = data.get('nickname')
     const langCode = data.get('native-language').split('-')[1]
     window.localStorage.setItem('owl-reading-settings', JSON.stringify({ nickname, langCode }))
-    initDB()
-      .catch((error) => { setDbError(error) })
-      .finally(() => { navigate('/reading', { replace: true }) })
+    navigate('/reading')
   }
 
   return (
@@ -35,12 +28,6 @@ export default function GetStarted() {
       justifyContent='center'
       maxWidth={480}
       sx={{ mx: 'auto', mt: 15 }}>
-      {dbError && (
-        <Alert severity='error'>
-          <AlertTitle>Error</AlertTitle>
-          {dbError.message}
-        </Alert>
-      )}
       <Stack direction='row' spacing={2} alignItems='center'>
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <AppRegistrationIcon />

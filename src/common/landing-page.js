@@ -14,7 +14,6 @@ import readingImg from '../images/reading.svg'
 import saveImg from '../images/save-word.svg'
 import remainderImg from '../images/remainder.svg'
 import { useNavigate } from 'react-router-dom'
-import { initDB } from '../modals/db'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 
@@ -28,15 +27,12 @@ export default function LandingPage() {
 
   useEffect(() => {
     const settings = localStorage.getItem('owl-reading-settings')
+    console.log(settings)
     if (settings) {
-      initDB()
-        .catch((error) => { console.log(error) })
-        .finally(() => {
-          navigate('/reading')
-        })
+      navigate('/reading')
+    } else {
+      setLoading(false)
     }
-
-    setLoading(false)
   }, [navigate])
 
   if (loading) {
@@ -53,7 +49,7 @@ export default function LandingPage() {
     <Container>
       <Stack direction='row' justifyContent='space-between' sx={{ mt: 4 }}>
         <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Owl Reading</Typography>
-        <Button variant='contained' component={LinkBehavior}>Get Started</Button>
+        <Button data-testid='get-started-btn' variant='contained' component={LinkBehavior}>Get Started</Button>
       </Stack>
       <Grid container sx={{ mt: 15 }}>
 
