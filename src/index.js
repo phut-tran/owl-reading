@@ -15,7 +15,7 @@ import App from './App'
 ReactDOM.render(
   <React.StrictMode>
     <CssBaseline />
-    <BrowserRouter basename='owl-reading'>
+    <BrowserRouter basename='/owl-reading'>
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/*' element={<App />}>
