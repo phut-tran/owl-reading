@@ -66,7 +66,7 @@ export default function LandingPage() {
         <Grid item xs={12} sx={{ mt: 20 }} container alignItems='center' justifyContent='center'>
           <Grid>
             <Typography textAlign='center' variant='h2' sx={{ fontSize: '2.8rem' }}>Read</Typography>
-            <Typography paragraph textAlign='center' sx={{ fontSize: '1.2rem' }}>Read your favorite literature.</Typography>
+            <Typography paragraph textAlign='center' sx={{ fontSize: '1.2rem' }}>Read your favorite literature. You can add, modify, remove, and edit your favorite document using our rich text editor.</Typography>
           </Grid>
         </Grid>
         <Grid
@@ -79,7 +79,7 @@ export default function LandingPage() {
         <Grid item xs={12} sx={{ mt: 20 }} container alignItems='center' justifyContent='center'>
           <Grid>
             <Typography textAlign='center' variant='h2' sx={{ fontSize: '2.8rem' }}>Save</Typography>
-            <Typography paragraph textAlign='center' sx={{ fontSize: '1.2rem' }}>Save any word you don't know to your wordlist.</Typography>
+            <Typography paragraph textAlign='center' sx={{ fontSize: '1.2rem' }}>You can look up words definition. Get words translation. And save it to your wordlist for later recall.</Typography>
           </Grid>
         </Grid>
         <Grid
