@@ -1,6 +1,6 @@
 # https://github.com/open-sauced/open-sauced/
 
-name: Development
+name: Test
 
 on:
   pull_request:
