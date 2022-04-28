@@ -26,6 +26,14 @@
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "@testing-library/cypress": "^8.0.2",
+    "cypress": "^9.5.4",
+    "eslint-plugin-cypress": "^2.12.1",
+    "husky": "^7.0.0",
+    "lint-staged": "^12.3.4",
+    "prettier": "^2.5.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -34,38 +42,6 @@
     "lint": "eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write \"./src/**/*.{ts,tsx,js,jsx}\"",
     "prepare": "husky install"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "plugin:cypress/recommended"
-    ],
-    "rules": {
-      "quotes": [
-        "warn",
-        "single"
-      ],
-      "eol-last": [
-        "warn",
-        "always"
-      ],
-      "semi": [
-        "warn",
-        "never"
-      ],
-      "jsx-quotes": [
-        "warn",
-        "prefer-single"
-      ]
-    },
-    "plugins": [
-      "eslint-plugin-cypress"
-    ],
-    "env": {
-      "cypress/globals": true
-    },
-    "root": true
   },
   "browserslist": {
     "production": [
@@ -78,14 +54,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@testing-library/cypress": "^8.0.2",
-    "cypress": "^9.5.4",
-    "eslint-plugin-cypress": "^2.12.1",
-    "husky": "^7.0.0",
-    "lint-staged": "^12.3.4",
-    "prettier": "^2.5.1"
   },
   "lint-stated": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
